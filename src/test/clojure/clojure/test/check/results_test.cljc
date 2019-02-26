@@ -6,4 +6,24 @@
 ;   the terms of this license.
 ;   You must not remove this notice, or any other, from this software.
 
-(ns clojure.test.check.results-test)
+(ns clojure.test.check.results-test
+  (:require #?(:cljs
+               [cljs.test :as test :refer-macros [are deftest testing is]])
+            #?(:clj
+               [clojure.test :refer :all])
+            [clojure.test.check.results :as results]))
+
+(deftest default-passing-values
+  (is (not (results/pass? nil)))
+  (is (not (results/pass? false)))
+  (are [x] (results/pass? x)
+    :keyword
+    'symbol
+    "string"
+    []
+    {}
+    #{}
+    ()
+    42
+    42.0
+    true))
